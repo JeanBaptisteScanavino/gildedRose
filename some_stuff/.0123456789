@@ -1,0 +1,49 @@
+import { GildedRose, Item } from '.'
+
+describe('GILDED ROSE KATA', () => {
+    test('Setup is OK', () => {
+        expect(true).toEqual(true)
+
+        expect(new GildedRose().updateQuality()).toEqual([])
+    })
+
+    describe('when day ends, for a "Standard" item', () => {
+        test('sellIn day\'s count decreases by one and quality decreases by one and two after sellIn passed', () => {
+            expect(new GildedRose([new Item('something', 1, 1)]).updateQuality()).toEqual([{ name: 'something', quality: 0, sellIn: 0 }])
+            expect(new GildedRose([new Item('something', 0, 1)]).updateQuality()).toEqual([{ name: 'something', quality: 0, sellIn: -1 }])
+            expect(new GildedRose([new Item('something', 0, 0)]).updateQuality()).toEqual([{ name: 'something', quality: 0, sellIn: -1 }])
+            expect(new GildedRose([new Item('something', 0, 4)]).updateQuality()).toEqual([{ name: 'something', quality: 2, sellIn: -1 }])
+        })
+    })
+
+    describe('when day ends, for a "Conjured" item', () => {
+        test('sellIn day\'s count decreases by one and quality decreases by one and two after sellIn passed', () => {
+            expect(new GildedRose([new Item('Conjured', 1, 4)]).updateQuality()).toEqual([{ name: 'Conjured', quality: 2, sellIn: 0 }])
+            expect(new GildedRose([new Item('Conjured', 0, 4)]).updateQuality()).toEqual([{ name: 'Conjured', quality: 0, sellIn: -1 }])
+            expect(new GildedRose([new Item('Conjured', 0, 0)]).updateQuality()).toEqual([{ name: 'Conjured', quality: 0, sellIn: -1 }])
+        })
+    })
+
+    describe('when day ends, for an "Aged Brie" item', () => {
+        test('sellIn day\'s count decreases by one and quality increases instead of decrease', () => {
+            expect(new GildedRose([new Item('Aged Brie', 11, 1)]).updateQuality()).toEqual([{ name: 'Aged Brie', quality: 2, sellIn: 10 }])
+            expect(new GildedRose([new Item('Aged Brie', 0, 1)]).updateQuality()).toEqual([{ name: 'Aged Brie', quality: 3, sellIn: -1 }])
+            expect(new GildedRose([new Item('Aged Brie', 0, 50)]).updateQuality()).toEqual([{ name: 'Aged Brie', quality: 50, sellIn: -1 }])
+        })
+    })
+
+    describe('when day ends, for an "Sulfuras" item', () => {
+        test('sellIn day\'s count and quality are constants', () => {
+            expect(new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 0, 80)]).updateQuality()).toEqual([{ name: 'Sulfuras, Hand of Ragnaros', quality: 80, sellIn: 0 }])
+        })
+    })
+
+    describe('when day ends, for an "Backstage" item', () => {
+        test('sellIn day\'s count decreases by one and quality increases according to rules : 1 if more than 10 days, 2 if more than 5 days, 3 if more than 0 day, drops to 0 after sellIn passed', () => {
+            expect(new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 11, 1)]).updateQuality()).toEqual([{ name: 'Backstage passes to a TAFKAL80ETC concert', quality: 2, sellIn: 10 }])
+            expect(new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 6, 1)]).updateQuality()).toEqual([{ name: 'Backstage passes to a TAFKAL80ETC concert', quality: 3, sellIn: 5 }])
+            expect(new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 1, 1)]).updateQuality()).toEqual([{ name: 'Backstage passes to a TAFKAL80ETC concert', quality: 4, sellIn: 0 }])
+            expect(new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 0, 1)]).updateQuality()).toEqual([{ name: 'Backstage passes to a TAFKAL80ETC concert', quality: 0, sellIn: -1 }])
+        })
+    })
+})
